@@ -199,6 +199,8 @@ if __name__ == '__main__':
     MainApp().run()
 ```
 
+Output:
+![App Screenshot](screenshots/bar_chart/example1.png)
 
 Example 2:
 
