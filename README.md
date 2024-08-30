@@ -199,7 +199,7 @@ if __name__ == '__main__':
     MainApp().run()
 ```
 
-![Output:](screenshots/bar_chart/example1.png?raw=true)
+![Output:](screenshots/example1.png?raw=true)
 
 
 Example 2:
