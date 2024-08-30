@@ -199,8 +199,9 @@ if __name__ == '__main__':
     MainApp().run()
 ```
 
+
 Output:
-![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/example1.PNG)
+![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/bar_chart/example1.PNG)
 
 
 Example 2:
@@ -241,8 +242,9 @@ if __name__ == '__main__':
     MainApp().run()
 ```
 
+
 Output:
-![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/example1.PNG)
+![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/bar_chart/example2.PNG)
 
 
 Example 3:
@@ -282,6 +284,10 @@ class MainApp(MDApp):
 if __name__ == '__main__':
     MainApp().run()
 ```
+
+
+Output:
+![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/bar_chart/example3.PNG)
 
 
 Example 4:
@@ -324,6 +330,9 @@ if __name__ == '__main__':
     MainApp().run()
 ```
 
+
+Output:
+![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/bar_chart/example4.PNG)
 
 
 Example 5:
@@ -370,6 +379,10 @@ if __name__ == '__main__':
 ```
 
 
+Output:
+![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/bar_chart/example5.PNG)
+
+
 Example 6:
 
 ```python
@@ -411,6 +424,11 @@ class MainApp(MDApp):
 if __name__ == '__main__':
     MainApp().run()
 ```
+
+
+Output:
+![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/bar_chart/example6.PNG)
+
 
 ## Contributing
 
