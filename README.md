@@ -199,7 +199,8 @@ if __name__ == '__main__':
     MainApp().run()
 ```
 
-![Output:](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/example1.PNG)
+Output:
+![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/example1.PNG)
 
 
 Example 2:
@@ -239,6 +240,9 @@ class MainApp(MDApp):
 if __name__ == '__main__':
     MainApp().run()
 ```
+
+Output:
+![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/example1.PNG)
 
 
 Example 3:
