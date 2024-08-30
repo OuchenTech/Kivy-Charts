@@ -199,7 +199,7 @@ if __name__ == '__main__':
     MainApp().run()
 ```
 
-![Output:](screenshots/example1.png?raw=true)
+![Output:](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/example1.PNG)
 
 
 Example 2:
