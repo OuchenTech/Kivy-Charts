@@ -19,7 +19,7 @@ Kivy Charts is a customizable chart library for Kivy applications. This library 
 To install the Kivy Charts library, clone this repository and include it in your Kivy project:
 
 ```bash
-git clone https://github.com/yourusername/kivy_charts.git
+git clone https://github.com/OuchenTech/kivy_charts.git
 ```
 
 Then, in your Kivy project, import the required chart widget:
