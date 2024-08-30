@@ -1,7 +1,0 @@
-Kivy==2.3.0
-KivyGradient==0.0.5
-https://github.com/kivymd/KivyMD/archive/master.zip
-materialyoucolor
-exceptiongroup
-asyncgui
-asynckivy
