@@ -76,7 +76,7 @@ Here are all the properties available for the BarChart widget, allowing for exte
 
 - `data`:
   - Type: DictProperty
-  - Description: A dictionary containing the labels and their corresponding values.
+  - Description: A dictionary containing the keys and their corresponding values.
   - Default: {}
   - Usage: Set the data to be displayed in the bar chart.
 
