@@ -2,8 +2,6 @@
 
 Kivy Charts is a customizable chart library for Kivy applications. This library allows developers to easily integrate charts into their Kivy apps, with support for various customization options to tailor the charts to specific needs. Currently, the library includes a Bar Chart, Pie Chart, and Donut Chart widgets, with more chart types to be added in the future.
 
----
-
 ## Table of Contents
 - [Installation](#installation)
 - [Requirements](#requirements)
@@ -26,8 +24,6 @@ Kivy Charts is a customizable chart library for Kivy applications. This library 
 - [Contributing](#contributing)
 - [License](#license)
 
----
-
 ## Installation
 
 To install the Kivy Charts library, clone this repository and include it in your Kivy project:
@@ -43,16 +39,12 @@ from kivy_charts.bar_chart import BarChart
 from kivy_charts.pie_chart import PieChart, DonutChart
 ```
 
----
-
 ## Requirements
 
 - Python 3.7+
 - Kivy = 2.3.0
 - Kivymd = https://github.com/kivymd/KivyMD/archive/master.zip
 - KivyGradient = 0.0.5
-
----
 
 ## Charts
 
@@ -77,6 +69,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy_charts.bar_chart import BarChart
 
 class MyChartApp(App):
+
     def build(self):
         layout = BoxLayout()
         data = {"A": 10, "B": 20, "C": 30}
@@ -235,6 +228,7 @@ from kivy_charts.bar_chart import BarChart
 class MainApp(MDApp):
     
     def build(self):
+
         main_layout = MDFloatLayout(md_bg_color='skyblue')
 
         box_layout = MDBoxLayout(
@@ -278,6 +272,7 @@ from kivy_charts.bar_chart import BarChart
 class MainApp(MDApp):
     
     def build(self):
+
         main_layout = MDFloatLayout(md_bg_color='skyblue')
 
         box_layout = MDBoxLayout(
@@ -321,6 +316,7 @@ from kivy_charts.bar_chart import BarChart
 class MainApp(MDApp):
     
     def build(self):
+
         main_layout = MDFloatLayout(md_bg_color='skyblue')
 
         box_layout = MDBoxLayout(
@@ -366,6 +362,7 @@ from kivy_charts.bar_chart import BarChart
 class MainApp(MDApp):
     
     def build(self):
+
         main_layout = MDFloatLayout(md_bg_color='skyblue')
 
         box_layout = MDBoxLayout(
@@ -414,6 +411,7 @@ from kivy_charts.bar_chart import BarChart
 class MainApp(MDApp):
     
     def build(self):
+
         main_layout = MDFloatLayout(md_bg_color='skyblue')
 
         box_layout = MDBoxLayout(
@@ -467,9 +465,12 @@ The PieChart widget provides a customizable pie chart for visualizing data.
 To use the PieChart widget in your Kivy app, simply add it to your layout and set the desired properties:
 
 ```python
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
 from kivy_charts.pie_chart import PieChart
 
 class MyChartApp(App):
+
     def build(self):
         layout = BoxLayout()
         data = {"Category A": 30, "Category B": 70, "Category C": 50}
@@ -552,7 +553,7 @@ Here are all the properties available for the PieChart widget, allowing for exte
 
 #### Examples
 
-##### Example1:
+##### Example 1:
 
 ```python
 from kivymd.app import MDApp
@@ -561,7 +562,9 @@ from kivymd.uix.floatlayout import MDFloatLayout
 from pie_chart import PieChart
 
 class MainApp(MDApp):
+
     def build(self):
+
         main_layout = MDFloatLayout(md_bg_color='skyblue')
 
         box_layout = MDBoxLayout(
@@ -592,7 +595,7 @@ if __name__ == '__main__':
 ![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/pie_chart/example1.PNG)
 
 
-##### Example2:
+##### Example 2:
 
 ```python
 from kivymd.app import MDApp
@@ -639,7 +642,7 @@ if __name__ == '__main__':
 ##### Output
 ![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/pie_chart/example2.PNG)
 
-##### Example3:
+##### Example 3:
 
 ```python
 from kivymd.app import MDApp
@@ -709,6 +712,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy_charts.pie_chart import DonutChart
 
 class MyChartApp(App):
+
     def build(self):
         layout = BoxLayout()
         data = {"Category A": 30, "Category B": 70, "Category C": 50}
@@ -749,7 +753,9 @@ from kivymd.uix.floatlayout import MDFloatLayout
 from pie_chart import DonutChart
 
 class MainApp(MDApp):
+
     def build(self):
+
         main_layout = MDFloatLayout(md_bg_color='skyblue')
 
         box_layout = MDBoxLayout(
@@ -832,14 +838,12 @@ if __name__ == '__main__':
 
 ##### Output
 ![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/donut_chart/example2.PNG)
-
---- 
+ 
 
 ## Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request. For major changes, please open an issue first to discuss what you would like to change.
 
----
 
 ## License
 
