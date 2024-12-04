@@ -836,9 +836,9 @@ A radar chart, also known as a spider or web chart, is a graphical method for di
 
 #### Features
 
-- Multidimensional Comparison: Plot multiple datasets across various categories for comparative analysis.
-- Flexible Customization: Adjust grid styles, axis lines, dataset colors, and transparency.
-- Interactive Visuals: Add legends, markers, and scale values to enhance chart usability.
+- Plot multiple datasets across various categories for comparative analysis.
+- Adjust grid styles, axis lines, dataset colors, and transparency.
+- Add legends, markers, and scale values to enhance chart usability.
 
 #### Usage
 
