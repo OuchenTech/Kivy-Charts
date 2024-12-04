@@ -1,6 +1,6 @@
 # Kivy Charts
 
-Kivy Charts is a customizable chart library for Kivy applications. This library allows developers to easily integrate charts into their Kivy apps, with support for various customization options to tailor the charts to specific needs. Currently, the library includes a Bar Chart, Pie Chart, and Donut Chart widgets, with more chart types to be added in the future.
+Kivy Charts is a customizable chart library for Kivy applications. This library allows developers to easily integrate charts into their Kivy apps, with support for various customization options to tailor the charts to specific needs. Currently, the library includes a Bar Chart, Pie Chart, Donut Chart and radar chart widgets, with more chart types to be added in the future.
 
 ## Table of Contents
 - [Installation](#installation)
@@ -21,6 +21,11 @@ Kivy Charts is a customizable chart library for Kivy applications. This library 
     - [Usage](#usage)
     - [DonutChart Properties](#donutchart-properties)
     - [Examples](#examples)
+  - [Radar Chart](#radar-chart)
+    - [Features](#features)
+    - [Usage](#usage)
+    - [RadarChart Properties](#radarchart-properties)
+    - [Examples](#examples)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -37,6 +42,7 @@ Then, in your Kivy project, import the required chart widget:
 ```python
 from kivy_charts.bar_chart import BarChart
 from kivy_charts.pie_chart import PieChart, DonutChart
+from kivy_charts.radar_chart import RadarChart
 ```
 
 ## Requirements
@@ -838,7 +844,506 @@ if __name__ == '__main__':
 
 ##### Output
 ![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/donut_chart/example2.PNG)
- 
+
+
+### Radar Chart
+
+A radar chart, also known as a spider or web chart, is a graphical method for displaying multivariate data. Each category is represented by a vertex, and the values are plotted along axes radiating from the center.
+
+#### Features
+
+- Multidimensional Comparison: Plot multiple datasets across various categories for comparative analysis.
+- Flexible Customization: Adjust grid styles, axis lines, dataset colors, and transparency.
+- Interactive Visuals: Add legends, markers, and scale values to enhance chart usability.
+
+#### Usage
+
+To use the RadarChart widget in your Kivy app, add it to your layout and configure the properties as required:
+
+```python
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy_charts.radar_chart import RadarChart
+
+class MyChartApp(App):
+
+    def build(self):
+        layout = BoxLayout()
+        data = {
+            "Python": [8, 9, 10, 9, 9, 10],
+            "JavaScript": [7, 8, 9, 8, 10, 9],
+            "C++": [10, 6, 7, 8, 8, 8]
+        }
+        categories = ["Performance", "Ease of Use", "Community Support", "Libraries", "Cross-Platform", "Popularity"]
+        bar_chart = BarChart(
+            data=data,
+            categories=categories,
+            max_value=10,
+        )
+        layout.add_widget(bar_chart)
+        return layout
+
+if __name__ == '__main__':
+    MyChartApp().run()
+```
+
+#### RadarChart Properties
+
+The RadarChart widget comes with the following customizable properties, enabling extensive flexibility:
+
+##### `data`:  
+- **Type:** `DictProperty`  
+- **Description:** A dictionary with dataset names as keys and lists of numerical values as items.  
+- **Default:** `{}`  
+- **Usage:** Set the data to be visualized on the radar chart.
+
+##### `categories`:
+- **Type:** `ListProperty`  
+- **Description:** A list of category names displayed along the axes.  
+- **Default:** `[]`  
+- **Usage:** Define the categories for your radar chart.
+
+##### `adjust_data`:  
+- **Type:** `BooleanProperty`  
+- **Description:** If `True`, adjusts datasets to match the number of categories.  
+- **Default:** `False`
+
+##### `missing_value_fill`:  
+- **Type:** `NumericProperty`  
+- **Description:** The value used to fill missing dataset values.  
+- **Default:** `0`
+
+##### `max_value`:  
+  - **Type:** `NumericProperty`  
+  - **Description:** The maximum value represented on the chart axes.  
+  - **Default:** `100`
+
+##### `num_grid_lines`:  
+- **Type:** `NumericProperty`  
+- **Description:** The number of concentric grid lines.  
+- **Default:** `5`
+
+##### `grid_style`:  
+- **Type:** `OptionProperty`  
+- **Options:** `'polygonal'`, `'circular'`  
+- **Description:** The style of the grid.  
+- **Default:** `'polygonal'`
+
+##### `grid_color`: 
+- **Type:** `ColorProperty`  
+- **Description:** The color of the grid lines.  
+- **Default:** `(0.7, 0.7, 0.7, 0.5)` (Gray)
+
+##### `grid_line_width`: 
+- **Type:** `NumericProperty`  
+- **Description:** The width of the grid lines.  
+- **Default:** `1`
+
+##### `axis_line_color`:  
+- **Type:** `ColorProperty`  
+- **Description:** The color of the axis lines.  
+- **Default:** `(0.7, 0.7, 0.7, 0.5)` (Gray)
+
+##### `axis_line_width`: 
+- **Type:** `NumericProperty`  
+- **Description:** The width of the axis lines.  
+- **Default:** `1.5`
+
+##### `font_name`:  
+- **Type:** `StringProperty`  
+- **Description:** The font name used for all labels.  
+- **Default:** `'Roboto'`
+
+##### `category_label_offset`:
+- **Type:** `NumericProperty`  
+- **Description:** The spacing between the category labels and the grid.  
+- **Default:** `5`
+
+##### `category_label_color`:
+- **Type:** `ColorProperty`  
+- **Description:** The color of category labels.  
+- **Default:** `(0, 0, 0, 1)` (Black)
+
+##### `category_label_font_size`: 
+- **Type:** `NumericProperty`  
+- **Description:** The font size of category labels.  
+- **Default:** `14`
+
+##### `show_scale_values`:
+- **Type:** `BooleanProperty`  
+- **Description:** Whether to display scale values on the first axis.  
+- **Default:** `True`
+
+##### `scale_value_color`:
+- **Type:** `ColorProperty`  
+- **Description:** The color of the scale value labels.  
+- **Default:** `(0, 0, 0, 1)` (Black)
+
+##### `scale_value_font_size`:
+- **Type:** `NumericProperty`  
+- **Description:** The font size of the scale value labels.  
+- **Default:** `12`
+
+##### `show_legend`:
+- **Type:** `BooleanProperty`  
+- **Description:** Whether to display the legend.  
+- **Default:** `False`
+
+##### `legend_valign`:
+- **Type:** `OptionProperty`  
+- **Options:** `'top'`, `'bottom'`  
+- **Description:** The vertical position of the legend.  
+- **Default:** `'bottom'`
+
+##### `legend_key_shape`:  
+- **Type:** `OptionProperty`  
+- **Options:** `'square'`, `'circle'`, `'rectangle'`  
+- **Description:** The shape of the legend keys.  
+- **Default:** `'square'`
+
+##### `legend_label_color`:
+- **Type:** `ColorProperty`  
+- **Description:** The color of the legend labels.  
+- **Default:** `(0, 0, 0, 1)` (Black)
+
+##### `legend_label_font_size`: 
+- **Type:** `NumericProperty`  
+- **Description:** The font size of the legend labels.  
+- **Default:** `14`
+
+##### `dataset_colors`**:  
+- **Type:** `ListProperty`  
+- **Description:** A list of colors for the datasets.  
+- **Default:** Predefined list of colors.
+
+##### `dataset_plot_style`:  
+- **Type:** `OptionProperty`  
+- **Options:** `'outlined'`, `'filled'`, `'mixed'`  
+- **Description:** The style of dataset visualization.  
+- **Default:** `'outlined'`
+
+##### `dataset_transparency`:  
+- **Type:** `NumericProperty`  
+- **Description:** The transparency level for filled dataset polygons (`0` to `1`).  
+- **Default:** `0.3`
+
+##### `dataset_line_width`:  
+- **Type:** `NumericProperty`  
+- **Description:** The width of dataset lines.  
+- **Default:** `1.5`
+
+##### `show_markers`: 
+- **Type:** `BooleanProperty`  
+- **Description:** Whether to display markers on data points.  
+- **Default:** `False`
+
+#### Examples
+
+##### Example 1:
+
+```python
+from kivymd.app import MDApp
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.floatlayout import MDFloatLayout
+from kivy_charts.radar_chart import RadarChart
+
+class MyRadarChartApp(MDApp):
+    
+    def build(self):
+        
+        layout = MDFloatLayout(md_bg_color='skyblue')
+
+        chart_layout = MDBoxLayout(
+            size_hint=(None, None),
+            size=(600, 500),
+            md_bg_color='white',
+            pos_hint={'center_x': 0.5, 'center_y': 0.5}
+        )
+        
+        data = {
+            "Product Line A": [55, 75, 90, 95, 88, 82],
+            "Product Line B": [70, 91, 85, 90, 65, 93],
+            "Product Line C": [80, 55, 80, 86, 95, 75],
+        }
+        
+        categories = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+
+        radar_chart = RadarChart(
+            data=data,
+            categories=categories,
+        )
+        
+        chart_layout.add_widget(radar_chart)
+        layout.add_widget(chart_layout)
+
+        return layout
+
+if __name__ == '__main__':
+    MyRadarChartApp().run()
+```
+
+##### Output:
+![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/radar_chart/example1.PNG)
+
+##### Example 2:
+
+```python
+from kivymd.app import MDApp
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.floatlayout import MDFloatLayout
+from kivy.uix.label import Label
+from kivy_charts.radar_chart import RadarChart
+
+class MyRadarChartApp(MDApp):
+    
+    def build(self):
+        
+        layout = MDFloatLayout(md_bg_color='skyblue')
+
+        chart_layout = MDBoxLayout(
+            size_hint=(None, None),
+            size=(600, 500),
+            md_bg_color='white',
+            pos_hint={'center_x': 0.5, 'center_y': 0.5}
+        )
+        
+        data = {
+            "Product Line A": [55, 75, 90, 95, 88, 82],
+            "Product Line B": [70, 91, 85, 90, 65, 93],
+            "Product Line C": [80, 55, 80, 86, 95, 75],
+        }
+        
+        categories = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+
+        radar_chart = RadarChart(
+            data=data,
+            categories=categories,
+            dataset_colors=["#f15a24", (252/255, 208/255, 0, 1), (0, 0, 1, 1)],
+            dataset_plot_style="outlined",
+            dataset_line_width=1.2,
+            show_markers=True,
+            show_legend=True,
+            legend_valign="bottom",
+            legend_key_shape="circle",    
+        )
+        
+        title = Label(
+            text="Performance Trends of Product Lines Over Six Months",
+            font_size= "14sp",
+            color="#434343",
+            pos_hint={'center_x': 0.5, 'center_y': 0.2},
+        )
+        
+        chart_layout.add_widget(radar_chart)
+        layout.add_widget(chart_layout)
+        layout.add_widget(title)
+
+        return layout
+
+if __name__ == '__main__':
+    MyRadarChartApp().run()
+```
+
+##### Output:
+![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/radar_chart/example2.PNG)
+
+##### Example 3:
+
+```python
+from kivymd.app import MDApp
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.floatlayout import MDFloatLayout
+from kivy.uix.label import Label
+from kivy_charts.radar_chart import RadarChart
+
+class MyRadarChartApp(MDApp):
+    
+    def build(self):
+        
+        layout = MDFloatLayout(md_bg_color='skyblue')
+
+        chart_layout = MDBoxLayout(
+            size_hint=(None, None),
+            size=(600, 500),
+            md_bg_color='white',
+            pos_hint={'center_x': 0.5, 'center_y': 0.5}
+        )
+        
+        data = {
+            "Product Line A": [55, 75, 90, 95, 88, 82],
+            "Product Line B": [70, 91, 85, 90, 65, 93],
+            "Product Line C": [80, 55, 80, 86, 95, 75],
+        }
+        
+        categories = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+
+        radar_chart = RadarChart(
+            data=data,
+            categories=categories,
+            grid_style="circular",
+            dataset_colors=[(1, 0, 0, 1), (0, 1, 0, 1), (0, 0, 1, 1)],
+            dataset_plot_style="mixed",
+            dataset_transparency=0.1,
+            show_legend=True,
+            legend_valign="top",
+            legend_key_shape="rectangle",    
+        )
+        
+        title = Label(
+            text="Performance Trends of Product Lines Over Six Months",
+            font_size= "14sp",
+            color="#434343",
+            pos_hint={'center_x': 0.5, 'center_y': 0.2},
+        )
+        
+        chart_layout.add_widget(radar_chart)
+        layout.add_widget(chart_layout)
+        layout.add_widget(title)
+
+        return layout
+
+if __name__ == '__main__':
+    MyRadarChartApp().run()
+```
+
+##### Output:
+![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/radar_chart/example3.PNG)
+
+##### Example 4:
+
+```python
+from kivymd.app import MDApp
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.floatlayout import MDFloatLayout
+from kivy.uix.label import Label
+from kivy_charts.radar_chart import RadarChart
+
+class MyRadarChartApp(MDApp):
+    
+    def build(self):
+        
+        layout = MDFloatLayout(md_bg_color='skyblue')
+
+        chart_layout = MDBoxLayout(
+            size_hint=(None, None),
+            size=(600, 500),
+            md_bg_color='white',
+            pos_hint={'center_x': 0.5, 'center_y': 0.5}
+        )
+        
+        data = {
+            "Python": [8, 9, 10, 9, 9, 10],
+            "C++": [10, 6, 7, 8, 8, 8],
+            "JavaScript": [7, 8, 9, 8, 10, 9],
+        }
+        categories = ["Performance", "Ease of Use", "Community Support", "Libraries", "Cross-Platform", "Popularity"]
+
+        radar_chart = RadarChart(
+            data=data,
+            categories=categories,
+            max_value=10,
+            grid_style='circular',
+            dataset_colors=[(1, 0, 0, 1), (0, 1, 0, 1), (0, 0, 1, 1)],
+            dataset_plot_style="filled",
+            dataset_transparency=0.2,
+            grid_line_width=1.5,
+            show_legend=True,
+            legend_key_shape='circle',
+        )
+        
+        title = Label(
+            text="Programming Language Features",
+            font_size= "14sp",
+            color="#434343",
+            pos_hint={'center_x': 0.5, 'center_y': 0.2},
+        )
+        
+        chart_layout.add_widget(radar_chart)
+        layout.add_widget(chart_layout)
+        layout.add_widget(title)
+
+        return layout
+
+if __name__ == '__main__':
+    MyRadarChartApp().run()
+```
+
+##### Output:
+![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/radar_chart/example4.PNG)
+
+##### Example 5:
+
+```python
+from kivymd.app import MDApp
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.floatlayout import MDFloatLayout
+from kivy.uix.image import Image
+from kivy_charts.radar_chart import RadarChart
+
+class MyRadarChartApp(MDApp):
+    
+    def build(self):
+        
+        layout = MDFloatLayout(md_bg_color='skyblue')
+        
+        background = Image(source="background.jpg", fit_mode='cover')
+        layout.add_widget(background)
+        
+        chelsea_logo = Image(
+            source="chelsea_logo.png",
+            pos_hint={"x": 0.02, "center_y": 0.5},
+            size_hint=(None, None),
+            size=(300, 300)
+            
+        )
+        layout.add_widget(chelsea_logo)
+        
+        Brentford_logo = Image(
+            source="Brentford_logo.png",
+            pos_hint={"right": 0.98, "center_y": 0.5},
+            size_hint=(None, None),
+            size=(300, 300)
+            
+        )
+        layout.add_widget(Brentford_logo)
+
+        chart_layout = MDBoxLayout(
+            size_hint=(None, None),
+            size=(400, 400),
+            md_bg_color=(0, 0, 0, 0.5),
+            pos_hint={'center_x': 0.5, 'center_y': 0.5}
+        )
+        
+        categories = ["PAC", "SHO", "PAS", "DRI", "DEF", "PHY"]
+        data = {
+            "Chelsea": [85, 85, 86, 86, 84, 85],
+            "Brentford": [75, 80, 74, 75, 75, 78],
+        }
+
+        radar_chart = RadarChart(
+            data=data,
+            categories=categories,
+            max_value=100,
+            num_grid_lines=2,
+            category_label_color="white",
+            category_label_font_size=20,
+            show_scale_values=False,
+            dataset_colors=["#034694", "#e30613"],
+            grid_line_width=1.5,
+        )
+        
+        chart_layout.add_widget(radar_chart)
+        layout.add_widget(chart_layout)
+
+        return layout
+
+if __name__ == '__main__':
+    MyRadarChartApp().run()
+```
+
+##### Output:
+![](https://github.com/OuchenTech/Kivy-Charts/blob/main/screenshots/radar_chart/example5.PNG)
+
 
 ## Contributing
 
