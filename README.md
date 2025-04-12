@@ -161,17 +161,17 @@ Here are all the properties available for the BarChart widget, allowing for exte
 - **Type:** `ColorProperty`
 - **Description:** Color of the chart title.
 - **Default:** `(0, 0, 0, 1)`
-##### `no_data_message`:
+##### `no_data_text`:
 - **Type:** `StringProperty`
-- **Description:** Message to display when there is no data.
+- **Description:** Text to display when there is no data.
 - **Default:** `"No data available"`
 ##### `no_data_font_size`:
 - **Type:** `NumericProperty`
-- **Description:** Font size for the no data message.
+- **Description:** Font size for the no data text.
 - **Default:** `20`
-##### `no_data_message_color`:
+##### `no_data_text_color`:
 - **Type:** `ColorProperty`
-- **Description:** Color of the no data message.
+- **Description:** Color of the no data text.
 - **Default:** `(0, 0, 0, 1)`
 
 #### Examples
