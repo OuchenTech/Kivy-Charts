@@ -489,7 +489,7 @@ Here are all the properties available for the PieChart widget, allowing for exte
 
 ##### `data`
 - **Type:** `DictProperty`
-- **Description:** Data for the chart. Keys represent the labels, and values represent the respective values to be converted into parcentages.
+- **Description:** Data for the chart. Keys represent the labels, and values represent the respective values to be converted into percentages.
 - **Default:** `{}`
 - **Usage:** Set the data to be displayed in the pie chart.
 
@@ -517,6 +517,11 @@ Here are all the properties available for the PieChart widget, allowing for exte
 - **Type:** `NumericProperty`
 - **Description:** Determines how far percentage labels are placed from the chart center.
 - **Default:** `0.5`
+
+##### `show_legend`
+- **Type:** `BooleanProperty`
+- **Description:** Controls whether the legend is displayed.
+- **Default:** `False`
 
 ##### `legend_valign`
 - **Type:** `OptionProperty`
@@ -551,6 +556,21 @@ Here are all the properties available for the PieChart widget, allowing for exte
 - **Options:** `'filled'`, `'outlined'`
 - **Description:** Style of legend keys.
 - **Default:** `'filled'`
+
+##### `no_data_text`
+- **Type:** `StringProperty`
+- **Description:** Text to display when no data is available.
+- **Default:** `"No data available"`
+
+##### `no_data_font_size`
+- **Type:** `NumericProperty`
+- **Description:** Font size for the no data message.
+- **Default:** `20`
+
+##### `no_data_text_color`
+- **Type:** `ColorProperty`
+- **Description:** Color of the no data message text.
+- **Default:** `(0, 0, 0, 1)`
 
 #### Examples
 
@@ -729,7 +749,6 @@ if __name__ == '__main__':
 ```
 
 #### DonutChart Properties
-
 ##### All properties from the PieChart widget.
 
 ##### `donut_radius`
@@ -742,6 +761,32 @@ if __name__ == '__main__':
 - **Type:** `ColorProperty`
 - **Description:** Color of the central donut hole.
 - **Default:** `(1, 1, 1, 1)`
+
+##### `center_text`
+- **Type:** `StringProperty`
+- **Description:** Text to display in the center of the donut hole.
+- **Default:** `""`
+
+##### `center_text_color`
+- **Type:** `ColorProperty`
+- **Description:** Color of the center text.
+- **Default:** `(0, 0, 0, 1)`
+
+##### `center_text_font_size`
+- **Type:** `NumericProperty`
+- **Description:** Font size of the center text.
+- **Default:** `14`
+
+##### `center_text_font_name`
+- **Type:** `StringProperty`
+- **Description:** Font name for the center text.
+- **Default:** `"Roboto"`
+
+##### `center_text_lines`
+- **Type:** `NumericProperty`
+- **Description:** Maximum number of lines for center text.
+- **Default:** `2`
+
 
 #### Examples
 
