@@ -72,96 +72,107 @@ if __name__ == '__main__':
 ```
 
 #### BarChart Properties
-
 Here are all the properties available for the BarChart widget, allowing for extensive customization:
-
 ##### `data`:
 - **Type:** `DictProperty`
 - **Description:** A dictionary containing the keys and their corresponding values.
 - **Default:** `{}`
 - **Usage:** Set the data to be displayed in the bar chart.
-
 ##### `chart_mode`:
 - **Type:** `OptionProperty`
 - **Options:** `'standard'`, `'interactive'`
 - **Description:** Mode of the chart; in 'interactive' mode, values are displayed on touch.
 - **Default:** `'standard'`
 - **Usage:** Use `'interactive'` to show values on touch; otherwise, use `'standard'`.
-
 ##### `color_style`:
 - **Type:** `OptionProperty`
 - **Options:** `'standard'`, `'gradient'`
 - **Description:** Color style of the bars. If set to 'gradient', bars will use gradient colors defined in gradient_colors.
 - **Default:** `'standard'`
-
 ##### `colors`:
 - **Type:** `ListProperty`
 - **Description:** A list of colors for the bars (Accept colors in RGBA and hex format). Only applicable when color_style is set to `'standard'`.
 - **Default:** `None`
-
 ##### `bar_default_color`:
 - **Type:** `ColorProperty`
 - **Description:** Default color for bars if colors are not provided. Applies when color_style is set to `'standard'`.
 - **Default:** '#3498db'
-
 ##### `gradient_colors`:
 - **Type:** `ListProperty`
 - **Description:** Colors used for gradient bars. This property is only used when color_style is set to 'gradient'.
 - **Default:** `['#33ff66', '#C3FF66']`
-
 ##### `bar_radius`:
 - **Type:** `NumericProperty`
 - **Description:** Radius of the bar corners.
 - **Default:** `0`
 - **Usage:** Set this property to give rounded corners to the bars.
-
-##### `label_font_name`:
+##### `font_name`:
 - **Type:** `StringProperty`
-- **Description:** Font name used for the labels.
+- **Description:** Font name used for all text elements in the chart.
 - **Default:** 'Roboto'
-
-##### `label_size`:
+##### `value_font_size`:
 - **Type:** `NumericProperty`
-- **Description:** Font size for the labels.
+- **Description:** Font size for the value labels displayed above each bar.
 - **Default:** `14`
-
-##### `label_color`:
+##### `value_color`:
 - **Type:** `ColorProperty`
-- **Description:** Color of the labels.
+- **Description:** Color of the value labels displayed above each bar.
 - **Default:** `(0, 0, 0, 1)`
-
+##### `axis_label_font_size`:
+- **Type:** `NumericProperty`
+- **Description:** Font size for the x and y axis labels.
+- **Default:** `14`
+##### `axis_label_color`:
+- **Type:** `ColorProperty`
+- **Description:** Color of the x and y axis labels.
+- **Default:** `(0, 0, 0, 1)`
 ##### `x_axis_label_rotation`:
 - **Type:** `OptionProperty`
 - **Options:** `'no-rotation'`, `'left-up'`, `'left-down'`.
 - **Description:** Rotation angle for x-axis labels.
 - **Default:** `'no-rotation'`
-
 ##### `y_axis_labels`:
 - **Type:** `BooleanProperty`
 - **Description:** Whether to show y-axis labels.
 - **Default:** `False`
-
 ##### `grid`:
 - **Type:** `BooleanProperty`
 - **Description:** Whether to show grid lines.
 - **Default:** `False`
-
 ##### `grid_style`:
 - **Type:** `OptionProperty`
 - **Options:** `'line'`, `'dashed'`, `'dotted'`.
 - **Description:** Style of the grid lines. Only applies when grid is True.
 - **Default:** `'line'`
-
 ##### `grid_color`:
 - **Type:** `ColorProperty`
 - **Description:** Color of the grid lines. Only applies when grid is True.
 - **Default:** `[0.5, 0.5, 0.5, 0.5]`
-
 ##### `title`:
 - **Type:** `StringProperty`
 - **Description:** Title of the chart.
 - **Default:** `""`
 - **Usage:** Set this property to display a title at the top of the chart.
+##### `title_font_size`:
+- **Type:** `NumericProperty`
+- **Description:** Font size for the chart title.
+- **Default:** `16`
+##### `title_color`:
+- **Type:** `ColorProperty`
+- **Description:** Color of the chart title.
+- **Default:** `(0, 0, 0, 1)`
+##### `no_data_message`:
+- **Type:** `StringProperty`
+- **Description:** Message to display when there is no data.
+- **Default:** `"No data available"`
+##### `no_data_font_size`:
+- **Type:** `NumericProperty`
+- **Description:** Font size for the no data message.
+- **Default:** `20`
+##### `no_data_message_color`:
+- **Type:** `ColorProperty`
+- **Description:** Color of the no data message.
+- **Default:** `(0, 0, 0, 1)`
 
 #### Examples
 
