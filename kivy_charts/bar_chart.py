@@ -23,32 +23,46 @@ class BarChart(Widget):
         bar_default_color (ColorProperty): Default color for bars.
         gradient_colors (ListProperty): Colors for gradient style.
         bar_radius (NumericProperty): Radius of bar corners.
-        label_font_name (StringProperty): Font name for labels.
-        label_size (NumericProperty): Font size for labels.
-        label_color (ColorProperty): Color of labels.
-        x_axis_labels_rotation (OptionProperty): Rotation angle for x-axis labels ('no-rotation', 'left-up', 'left-down').
+        font_name (StringProperty): Font name for labels.
+        value_color (ColorProperty): Color for value labels displayed above bars.
+        value_font_size (NumericProperty): Font size for value labels displayed above bars.
+        axis_label_color (ColorProperty): Color for x and y axis labels.
+        axis_label_font_size (NumericProperty): Font size for x and y axis labels.
+        x_axis_label_rotation (OptionProperty): Rotation angle for x-axis labels ('no-rotation', 'left-up', 'left-down').
         y_axis_labels (BooleanProperty): Whether to show y-axis labels.
         grid (BooleanProperty): Whether to show grid lines.
         grid_style (OptionProperty): Style of grid ('line', 'dashed', or 'dotted').
         grid_color (ColorProperty): Color of grid lines.
         title (StringProperty): Title of the chart.
+        title_font_size (NumericProperty): Font size for the chart title.
+        title_color (ColorProperty): Color for the chart title.
+        no_data_text (StringProperty): Message to display when there is no data.
+        no_data_font_size (NumericProperty): Font size for the no data text.
+        no_data_text_color (ColorProperty): Color for the no data text.
     """
     data = DictProperty({})
-    chart_mode = OptionProperty('standard', options=['standard', 'interactive'])
-    color_style = OptionProperty('standard', options=['standard', 'gradient'])
-    colors = ListProperty(None) # List of bars colors
-    bar_default_color = ColorProperty('#3498db')
-    gradient_colors = ListProperty(['#33ff66', '#C3FF66'])  # Default gradient colors
+    chart_mode = OptionProperty("standard", options=["standard", "interactive"])
+    color_style = OptionProperty("standard", options=["standard", "gradient"])
+    colors = ListProperty(None)
+    bar_default_color = ColorProperty("#3498db")
+    gradient_colors = ListProperty(["#33ff66", "#C3FF66"])
     bar_radius = NumericProperty(0)
-    label_font_name = StringProperty("Roboto")  # Default to Roboto, which is Kivy's default font
-    label_size = NumericProperty(14)
-    label_color = ColorProperty((0, 0, 0, 1))
-    x_axis_label_rotation = OptionProperty('no-rotation', options=['no-rotation', 'left-up', 'left-down'])
+    font_name = StringProperty("Roboto")
+    value_color = ColorProperty((0, 0, 0, 1))
+    value_font_size = NumericProperty(14)
+    axis_label_color = ColorProperty((0, 0, 0, 1))
+    axis_label_font_size = NumericProperty(14)
+    x_axis_label_rotation = OptionProperty("no-rotation", options=["no-rotation", "left-up", "left-down"])
     y_axis_labels = BooleanProperty(False)
     grid = BooleanProperty(False)
-    grid_style = OptionProperty('line', options=['line', 'dashed', 'dotted'])
+    grid_style = OptionProperty("line", options=["line", "dashed", "dotted"])
     grid_color = ColorProperty([0.5, 0.5, 0.5, 0.5])
     title = StringProperty("")
+    title_font_size = NumericProperty(16)
+    title_color = ColorProperty((0, 0, 0, 1))
+    no_data_text = StringProperty("No data available")
+    no_data_font_size = NumericProperty(20)
+    no_data_text_color = ColorProperty((0, 0, 0, 1))
 
     def __init__(self, **kwargs):
         """Initialize the BarChart widget."""
@@ -79,22 +93,49 @@ class BarChart(Widget):
         self.validate_input()
         
         if not self.data:
+            if self.no_data_text:
+                # Calculate center position relative to parent
+                center_x = self.x + self.width / 2
+                center_y = self.y + self.height / 2
+                
+                # Create the no data label
+                no_data_label = Label(
+                    text=self.no_data_text,
+                    font_size=self.no_data_font_size,
+                    font_name=self.font_name,
+                    color=self.no_data_text_color,
+                    size_hint=(None, None),
+                )
+                
+                # Ensure the label has proper dimensions
+                no_data_label.texture_update()
+                label_width = no_data_label.texture_size[0] + 20  # Add some padding
+                label_height = no_data_label.texture_size[1] + 10
+                
+                # Set the final size and position
+                no_data_label.size = (label_width, label_height)
+                no_data_label.pos = (
+                    center_x - label_width / 2,
+                    center_y - label_height / 2
+                )
+                
+                # Add to widget tree
+                self.add_widget(no_data_label)
             return
         
         # Generate gradient texture if needed
-        if self.color_style == 'gradient':
+        if self.color_style == "gradient":
             try:
                 self.gradient_texture = self.generate_gradient_texture()
             except ValueError as e:
                 print(f"Error generating gradient texture: {e}")
                 self.color_style = 'standard'
-                print("Color style is fallback to standard")
 
         # Calculate chart dimensions
         num_bars = len(self.data)
         max_value = max(self.data.values())
         title_height = 40 if self.title else 10
-        bottom_padding = 80 if self.x_axis_label_rotation != 'no-rotation' else 50
+        bottom_padding = 80 if self.x_axis_label_rotation != "no-rotation" else 50
         top_padding = 30
         left_padding = 60 if self.grid and self.y_axis_labels else 20
         right_padding = 30 if self.grid and self.y_axis_labels else 20
@@ -112,8 +153,8 @@ class BarChart(Widget):
 
         # Add title if present
         if self.title:
-            title_label = Label(text=self.title, font_size=self.label_size * 1.2, font_name=self.label_font_name,
-                                color=self.label_color, size_hint=(None, None), size=(self.width, title_height))
+            title_label = Label(text=self.title, font_size=self.title_font_size, font_name=self.font_name,
+                                color=self.title_color, size_hint=(None, None), size=(self.width, title_height))
             title_label.pos = (self.x, self.top - title_height)
             self.add_widget(title_label)
 
@@ -130,16 +171,16 @@ class BarChart(Widget):
             bar_y = start_y
 
             self.bar_infos.append({
-                'x': bar_x,
-                'y': bar_y,
-                'width': bar_width,
-                'height': bar_height,
-                'value': value
+                "x": bar_x,
+                "y": bar_y,
+                "width": bar_width,
+                "height": bar_height,
+                "value": value
             })
 
             # Draw bar
             with self.canvas:
-                if self.color_style == 'gradient' and self.gradient_texture:
+                if self.color_style == "gradient" and self.gradient_texture:
                     Color(1, 1, 1, 1)
                     RoundedRectangle(
                         pos=(bar_x, bar_y), size=(bar_width, bar_height), radius=[self.bar_radius], texture=self.gradient_texture
@@ -151,24 +192,35 @@ class BarChart(Widget):
                     )
 
             # Add value label for standard mode
-            if self.chart_mode == 'standard':
-                value_label = Label(text=str(value), font_size=self.label_size, font_name=self.label_font_name,
-                                    color=self.label_color, size_hint=(None, None), size=(bar_width, 20))
-                value_label.pos = (bar_x, bar_y + bar_height + 5)
+            if self.chart_mode == "standard":
+                value_label = Label(
+                    text=str(value), font_size=self.value_font_size, 
+                    font_name=self.font_name, color=self.value_color, 
+                    size_hint=(None, None),
+                    )
+                
+                value_label.texture_update()
+                value_label.size = value_label.texture_size
+                # Center the label horizontally with the bar
+                value_label.pos = (bar_x + (bar_width - value_label.width) / 2, bar_y + bar_height + 5)
                 self.add_widget(value_label)
 
             # Add x-axis label
-            x_axis_label = Label(text=label, font_size=self.label_size, color=self.label_color,
-                               size_hint=(None, None), size=(bar_width, 20), font_name=self.label_font_name)
+            x_axis_label = Label(
+                text=label, font_size=self.axis_label_font_size,
+                color=self.axis_label_color, size_hint=(None, None), 
+                font_name=self.font_name
+                )
             
             x_axis_label.texture_update()
+            x_axis_label.size = (bar_width, x_axis_label.texture_size[1])  # Set height based on content
             x_axis_label.pos = (bar_x, start_y - (bottom_padding/2))
             
             # Rotate x-axis label 
             angle = 0
-            if self.x_axis_label_rotation == 'left-up':
+            if self.x_axis_label_rotation == "left-up":
                 angle = 45
-            elif self.x_axis_label_rotation == 'left-down':
+            elif self.x_axis_label_rotation == "left-down":
                 angle = 315
                 
             x_axis_label.canvas.before.clear()
@@ -198,9 +250,9 @@ class BarChart(Widget):
             
             with self.canvas:
                 Color(*self.grid_color)
-                if self.grid_style == 'line':
+                if self.grid_style == "line":
                     Line(points=[start_x - 10, y, start_x + total_width + 10, y], width=1)
-                elif self.grid_style == 'dashed':
+                elif self.grid_style == "dashed":
                     for x in range(int(start_x - 10), int(start_x + total_width + 10), 20):
                         Line(points=[x, y, x + 10, y], width=1)
                 else:  # dotted
@@ -209,9 +261,16 @@ class BarChart(Widget):
                         
             # Draw y-axis labels if enabled
             if self.y_axis_labels:
-                y_axis_label = Label(text=str(int(value)), font_size=self.label_size, color=self.label_color,
-                              size_hint=(None, None), size=(40, 20), font_name=self.label_font_name)
-                y_axis_label.pos = (start_x - 50, y - 10)
+                y_axis_label = Label(
+                    text=str(int(value)), font_size=self.axis_label_font_size, 
+                    color=self.axis_label_color, size_hint=(None, None), 
+                    font_name=self.font_name,
+                    )
+                
+                y_axis_label.texture_update()
+                y_axis_label.size = y_axis_label.texture_size
+                # Right-align the label and position it to the left of the grid
+                y_axis_label.pos = (start_x - y_axis_label.width - 15, y - y_axis_label.height/2)
                 self.add_widget(y_axis_label)
 
     def is_valid_hex(self, color):
@@ -341,10 +400,13 @@ class BarChart(Widget):
         bubble_y = y + 5  # Add a small offset to position it just above the bar
         
         bubble = Bubble(size_hint=(None, None), size=(bubble_width, bubble_height), 
-                        pos=(bubble_x, bubble_y), arrow_pos='bottom_mid', )
+                        pos=(bubble_x, bubble_y), arrow_pos="bottom_mid", )
         
         # Add value label to show in the bubble
-        bubble_label = Label(text=str(value), font_size=self.label_size, color=self.label_color, font_name=self.label_font_name)
+        bubble_label = Label(
+            text=str(value), font_size=self.value_font_size,
+            color=self.value_color, font_name=self.font_name
+            )
         bubble.add_widget(bubble_label)
         
         self.add_widget(bubble)
