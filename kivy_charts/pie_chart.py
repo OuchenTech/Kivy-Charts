@@ -1,7 +1,7 @@
 from kivy.uix.widget import Widget
 from kivy.graphics import Color, Ellipse, Rectangle, Line, Triangle
 from kivy.uix.label import Label
-from kivy.properties import DictProperty, ListProperty, NumericProperty, ColorProperty, OptionProperty, StringProperty
+from kivy.properties import DictProperty, ListProperty, NumericProperty, ColorProperty, OptionProperty, StringProperty, BooleanProperty
 from kivy.utils import get_color_from_hex
 import math
 
@@ -33,6 +33,9 @@ class PieChart(Widget):
     percentage_distance_factor : NumericProperty
         Determines how far percentage labels are placed from the center of the pie chart. Defaults to `0.5`.
 
+    show_legend : BooleanProperty
+        Whether to display the legend. Defaults to `False`.
+
     legend_valign : OptionProperty
         Vertical alignment of the legend. Options: `'top'`, `'bottom'`, `'center'`. Defaults to `'center'`.
 
@@ -50,6 +53,15 @@ class PieChart(Widget):
 
     legend_key_style : OptionProperty
         Style of legend keys. Options: `'filled'`, `'outlined'`. Defaults to `'filled'`.
+
+    no_data_text : StringProperty
+        Text to display when no data is available. Defaults to "No data available".
+
+    no_data_font_size : NumericProperty
+        Font size for no data text. Defaults to `20`.
+
+    no_data_text_color : ColorProperty
+        Color of no data text. Defaults to black `(0, 0, 0, 1)`.
 
     Methods:
     --------
@@ -71,14 +83,18 @@ class PieChart(Widget):
     font_name = StringProperty("Roboto")
     percentage_color = ColorProperty((0, 0, 0, 1))  
     percentage_font_size = NumericProperty(14)      
-    percentage_distance_factor = NumericProperty(0.5) 
+    percentage_distance_factor = NumericProperty(0.5)
+    show_legend = BooleanProperty(False)
     legend_valign = OptionProperty('center', options=['top', 'bottom', 'center'])  
     legend_position = OptionProperty('left', options=['left', 'right'])  
     legend_label_color = ColorProperty((0, 0, 0, 1))      
     legend_label_font_size = NumericProperty(14)          
     legend_key_shape = OptionProperty('circle', options=['circle', 'square', 'diamond', 'hexagon', 'star'])
     legend_key_style = OptionProperty('filled', options=['filled', 'outlined'])
-    
+    no_data_text = StringProperty("No data available")
+    no_data_font_size = NumericProperty(20)
+    no_data_text_color = ColorProperty((0, 0, 0, 1))
+
     def __init__(self, **kwargs):
         """
         Initializes the PieChart with default properties and binds updates to property changes.
@@ -98,42 +114,77 @@ class PieChart(Widget):
         self.clear_widgets()
         
         if not self.data:
+            if self.no_data_text:
+                # Calculate center position relative to parent
+                center_x = self.x + self.width / 2
+                center_y = self.y + self.height / 2
+                
+                # Create the no data label
+                no_data_label = Label(
+                    text=self.no_data_text,
+                    font_size=self.no_data_font_size,
+                    font_name=self.font_name,
+                    color=self.no_data_text_color,
+                    size_hint=(None, None),
+                )
+                
+                # Ensure the label has proper dimensions
+                no_data_label.texture_update()
+                label_width = no_data_label.texture_size[0] + 20  # Add some padding
+                label_height = no_data_label.texture_size[1] + 10
+                
+                # Set the final size and position
+                no_data_label.size = (label_width, label_height)
+                no_data_label.pos = (
+                    center_x - label_width / 2,
+                    center_y - label_height / 2
+                )
+                
+                # Add to widget tree
+                self.add_widget(no_data_label)
             return
         
         # Compute the total value to calculate percentages
         total_value = sum(self.data.values())
         if total_value == 0:
             return
-
-        # Calculate dimensions and positions based on legend position
-        legend_width = self.width / 3
-        chart_width = 2 * self.width / 3
         
-        if self.legend_position == 'right':
-            legend_x = self.x + chart_width + 10
-            chart_center_x = self.x + chart_width / 2
-        else:  # legend_position == 'left'
-            legend_x = self.x + 10
-            chart_center_x = self.x + legend_width + (chart_width / 2)
+        # Calculate dimensions and positions based on legend position
+        if self.show_legend:
+            legend_width = self.width / 3
+            chart_width = 2 * self.width / 3
+            
+            if self.legend_position == 'right':
+                legend_x = self.x + chart_width + 10
+                chart_center_x = self.x + chart_width / 2
+            else:  # legend_position == 'left'
+                legend_x = self.x + 10
+                chart_center_x = self.x + legend_width + (chart_width / 2)
 
-        # Define some dimensions for the chart
-        chart_radius = min(chart_width, self.height) / 2 - 10
+            # Define some dimensions for the chart
+            chart_radius = min(chart_width, self.height) / 2 - 10
+
+            # Calculate the total height required for legend items
+            legend_item_height = 30  # Each legend item height (including spacing)
+            num_items = len(self.data)
+            total_legend_height = num_items * legend_item_height
+
+            # Determine the starting y position based on legend alignment
+            if self.legend_valign == 'top':
+                legend_y = self.top - 30
+            elif self.legend_valign == 'bottom':
+                legend_y = self.y + total_legend_height
+            elif self.legend_valign == 'center':
+                legend_y = self.y + (self.height - total_legend_height) / 2 + total_legend_height - legend_item_height
+        else:
+            # Without legend: Use full width for chart
+            chart_width = self.width
+            chart_center_x = self.x + (self.width / 2)
+            chart_radius = min(self.width, self.height) / 2 - 10
+            
         center_y = self.y + self.height / 2
         start_angle = 0
-
-        # Calculate the total height required for legend items
-        legend_item_height = 30  # Each legend item height (including spacing)
-        num_items = len(self.data)
-        total_legend_height = num_items * legend_item_height
-
-        # Determine the starting y position based on legend alignment
-        if self.legend_valign == 'top':
-            legend_y = self.top - 30
-        elif self.legend_valign == 'bottom':
-            legend_y = self.y + total_legend_height
-        elif self.legend_valign == 'center':
-            legend_y = self.y + (self.height - total_legend_height) / 2 + total_legend_height - legend_item_height
-
+        
         # Store segment information for later label positioning
         segments = []
 
@@ -178,14 +229,16 @@ class PieChart(Widget):
                 font_name=self.font_name,
                 color=self.percentage_color, 
                 size_hint=(None, None), 
-                size=(50, 20)
             )
+            percentage_label.texture_update()
+            percentage_label.size = percentage_label.texture_size
             percentage_label.center = (label_x, label_y)
             self.add_widget(percentage_label)
 
             # Draw legend
-            self.draw_legend_item(legend_x, legend_y, segment['color'], segment['label'])
-            legend_y -= legend_item_height  # Move to the next legend item position
+            if self.show_legend:
+                self.draw_legend_item(legend_x, legend_y, segment['color'], segment['label'])
+                legend_y -= legend_item_height  # Move to the next legend item position
 
     def get_color(self, index):
         """
@@ -232,12 +285,12 @@ class PieChart(Widget):
             
             if self.legend_key_shape == 'square':
                 if self.legend_key_style == 'filled':
-                    Rectangle(pos=(x, y), size=(20, 20))
+                    Rectangle(pos=(x, y), size=(10, 10))
                 else:
-                    Line(rectangle=(x, y, 20, 20), width=1.5)
+                    Line(rectangle=(x, y, 15, 15), width=1.5)
             elif self.legend_key_shape == 'circle':
                 if self.legend_key_style == 'filled':
-                    Ellipse(pos=(x, y), size=(20, 20))
+                    Ellipse(pos=(x, y), size=(15, 15))
                 else:
                     Line(circle=(x + 10, y + 10, 10), width=1.5)
             elif self.legend_key_shape == 'diamond':
@@ -349,8 +402,7 @@ class PieChart(Widget):
                     star_outline_points.extend(point)
                 star_outline_points.extend(star_points[0])  # Close the star shape
                 Line(points=star_outline_points, width=1.5)
-                
-                
+
 class DonutChart(PieChart):
     """
     DonutChart Widget
@@ -368,6 +420,21 @@ class DonutChart(PieChart):
     percentage_distance_factor : NumericProperty
         Automatically calculated to position percentage labels between the donut hole and the edge of the chart.
         Users can override this if needed.
+        
+    center_text : StringProperty
+        Text to display in the center of the donut hole. Defaults to empty string.
+
+    center_text_color : ColorProperty
+        Color of the center text. Defaults to black.
+
+    center_text_font_size : NumericProperty
+        Font size of the center text. Defaults to 14.
+
+    center_text_font_name : StringProperty
+        Font name for the center text. Defaults to "Roboto".
+
+    center_text_lines : NumericProperty
+        Maximum number of lines for center text. Defaults to 2.
 
     Methods:
     --------
@@ -381,18 +448,35 @@ class DonutChart(PieChart):
     donut_radius = NumericProperty(0.5)  
     donut_hole_color = ColorProperty((1, 1, 1, 1))  
     percentage_distance_factor = NumericProperty(None)
+    
+    # New properties for center text
+    center_text = StringProperty("")
+    center_text_font_name = StringProperty("Roboto")
+    center_text_color = ColorProperty((0, 0, 0, 1))
+    center_text_font_size = NumericProperty(14)
+    center_text_lines = NumericProperty(2)
 
     def __init__(self, **kwargs):
         """
         Initializes the DonutChart with default properties and binds updates to property changes.
         """
         super().__init__(**kwargs)
-        self.bind(donut_radius=self.update_chart, donut_hole_color=self.update_chart)
+        self.bind(
+            donut_radius=self.update_chart, 
+            donut_hole_color=self.update_chart,
+            center_text=self.update_chart
+            )
 
     def update_chart(self, *args):
         """
         Overrides the `update_chart` method of `PieChart` to include a donut hole in the center of the chart.
         """
+        
+        # First check for no-data case (let parent handle it)
+        if not self.data:
+            super().update_chart(*args)
+            return
+        
         self.donut_radius = max(0.2, min(self.donut_radius, 0.8))
 
         # Automatically set percentage_distance_factor if not explicitly provided
@@ -404,23 +488,66 @@ class DonutChart(PieChart):
 
         # Add the donut hole
         self.draw_donut_hole()
-
+        
     def draw_donut_hole(self):
         """
         Draws the central donut hole using the specified `donut_radius` and `donut_color`.
+        The hole is properly centered whether or not the legend is shown.
         """
-        # Center and dimensions
-        legend_width = self.width / 3
-        chart_width = 2 * self.width / 3
-        chart_center_x = self.x + chart_width / 2 if self.legend_position == 'right' else self.x + legend_width + (chart_width / 2)
-        chart_radius = min(chart_width, self.height) / 2 - 10
+        if self.show_legend:
+            # When legend is shown, use partial width
+            legend_width = self.width / 3
+            chart_width = 2 * self.width / 3
+            
+            if self.legend_position == 'right':
+                chart_center_x = self.x + chart_width / 2
+            else:  # legend_position == 'left'
+                chart_center_x = self.x + legend_width + (chart_width / 2)
+                
+            chart_radius = min(chart_width, self.height) / 2 - 10
+        else:
+            # When legend is hidden, use full width
+            chart_width = self.width
+            chart_center_x = self.x + (self.width / 2)
+            chart_radius = min(self.width, self.height) / 2 - 10
+
         center_y = self.y + self.height / 2
 
         # Inner radius of the donut hole
         hole_radius = chart_radius * self.donut_radius
-
+        
         # Draw the hole
         with self.canvas:
             Color(*self.donut_hole_color)
             Ellipse(pos=(chart_center_x - hole_radius, center_y - hole_radius),
                     size=(2 * hole_radius, 2 * hole_radius))
+            
+        # Add center text if provided
+        if self.center_text:
+            # Calculate the maximum width available for text
+            max_text_width = 2 * hole_radius * 0.9  # 90% of hole diameter
+            
+            # Create the label with text wrapping
+            center_text_label = Label(
+                text=self.center_text,
+                font_size=self.center_text_font_size,
+                font_name=self.center_text_font_name,
+                color=self.center_text_color,
+                size_hint=(None, None),
+                size=(max_text_width, 2 * hole_radius),
+                halign='center',
+                valign='center'
+            )
+            
+            # Enable text wrapping
+            center_text_label.text_size = center_text_label.size
+            center_text_label.max_lines = self.center_text_lines
+            center_text_label.shorten = True
+            
+            # Position the label in the center of the hole
+            center_text_label.pos = (
+                chart_center_x - max_text_width / 2,
+                center_y - hole_radius + (2 * hole_radius - center_text_label.height) / 2
+            )
+            
+            self.add_widget(center_text_label)
