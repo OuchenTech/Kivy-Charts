@@ -84,6 +84,10 @@ Here are all the properties available for the BarChart widget, allowing for exte
 - **Description:** Mode of the chart; in 'interactive' mode, values are displayed on touch.
 - **Default:** `'standard'`
 - **Usage:** Use `'interactive'` to show values on touch; otherwise, use `'standard'`.
+##### `bubble_color`: 
+- **Type:** `ColorProperty`
+- **Description:** Background color of the bubble displayed in interactive mode.
+- **Default:** 'skyblue'
 ##### `color_style`:
 - **Type:** `OptionProperty`
 - **Options:** `'standard'`, `'gradient'`
