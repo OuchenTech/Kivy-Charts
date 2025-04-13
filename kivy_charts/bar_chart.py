@@ -4,7 +4,7 @@ from kivy.uix.label import Label
 from kivy.properties import DictProperty, ListProperty, NumericProperty, ColorProperty, BooleanProperty, OptionProperty, StringProperty
 from kivy.utils import get_color_from_hex
 from kivy_gradient import Gradient
-from kivy.uix.bubble import Bubble
+from kivy.uix.bubble import Bubble, BubbleContent
 from kivy.clock import Clock
 import re
 
@@ -18,6 +18,7 @@ class BarChart(Widget):
     Attributes:
         data (DictProperty): A dictionary of label-value pairs for the chart.
         chart_mode (OptionProperty): Mode of the chart ('standard' or 'interactive').
+        bubble_color (ColorProperty): Background color of the bubble displayed in interactive mode.
         color_style (OptionProperty): Color style of bars ('standard' or 'gradient').
         colors (ListProperty): List of colors for bars.
         bar_default_color (ColorProperty): Default color for bars.
@@ -42,6 +43,7 @@ class BarChart(Widget):
     """
     data = DictProperty({})
     chart_mode = OptionProperty("standard", options=["standard", "interactive"])
+    bubble_color = ColorProperty("skyblue")  # Default Skyblue color
     color_style = OptionProperty("standard", options=["standard", "gradient"])
     colors = ListProperty(None)
     bar_default_color = ColorProperty("#3498db")
@@ -135,7 +137,11 @@ class BarChart(Widget):
         num_bars = len(self.data)
         max_value = max(self.data.values())
         title_height = 40 if self.title else 10
-        bottom_padding = 80 if self.x_axis_label_rotation != "no-rotation" else 50
+        
+        # Increase bottom padding to provide more space for labels
+        # Adjust based on rotation and screen resolution
+        bottom_padding = 100 if self.x_axis_label_rotation != "no-rotation" else 70
+        
         top_padding = 30
         left_padding = 60 if self.grid and self.y_axis_labels else 20
         right_padding = 30 if self.grid and self.y_axis_labels else 20
@@ -214,7 +220,15 @@ class BarChart(Widget):
             
             x_axis_label.texture_update()
             x_axis_label.size = (bar_width, x_axis_label.texture_size[1])  # Set height based on content
-            x_axis_label.pos = (bar_x, start_y - (bottom_padding/2))
+            
+            # Position labels further away from the bars to prevent overlap
+            # Use more spacing for rotated labels
+            if self.x_axis_label_rotation == "no-rotation":
+                label_y_pos = start_y - (bottom_padding/1.6)  # Increased distance from bars
+            else:
+                label_y_pos = start_y - (bottom_padding/1.8)  
+                
+            x_axis_label.pos = (bar_x, label_y_pos)
             
             # Rotate x-axis label 
             angle = 0
@@ -389,26 +403,61 @@ class BarChart(Widget):
             y (float): The y-coordinate of the top of the bar.
             value: The value to display in the bubble.
         """
-        bubble_width = 60
-        bubble_height = 40
+        # Calculate width based on the value length
+        bubble_width = max(60, len(str(value)) * 15)
         
         # Calculate the center position of the bar
         bar_center_x = x + self.bar_infos[0]['width'] / 2
         
         # Position the bubble centered above the bar
         bubble_x = bar_center_x - bubble_width / 2
-        bubble_y = y + 5  # Add a small offset to position it just above the bar
+        bubble_y = y + 10  # Position it above the bar
         
-        bubble = Bubble(size_hint=(None, None), size=(bubble_width, bubble_height), 
-                        pos=(bubble_x, bubble_y), arrow_pos="bottom_mid", )
+        # Create the bubble without an arrow
+        bubble = Bubble(
+            size_hint=(None, None),
+            size=(bubble_width, 0),  # Height will be set after label creation
+            pos=(bubble_x, bubble_y),
+            show_arrow=False  # No arrow
+        )
         
-        # Add value label to show in the bubble
+        # Create bubble content with custom background
+        content = BubbleContent(
+            orientation="vertical",
+            padding=[10, 10, 10, 10],  # Equal padding on all sides
+            background_image="",
+            background_color=self.bubble_color,  # Use bubble_color if defined, else default blue,
+            border_auto_scale="both_lower",
+            size_hint=(1, None),  # Allow height to adjust to content
+            height=0  # Will be set once the label is added
+        )
+        
+        # Add value label to the content, allowing its height to be natural
         bubble_label = Label(
-            text=str(value), font_size=self.value_font_size,
-            color=self.value_color, font_name=self.font_name
-            )
-        bubble.add_widget(bubble_label)
+            text=str(value),
+            font_size=self.value_font_size,
+            color=self.value_color,  
+            font_name=self.font_name,
+            size_hint=(1, None)  # No fixed height
+        )
         
+        # Update the texture to get the actual size
+        bubble_label.texture_update()
+        bubble_label.height = bubble_label.texture_size[1]
+        
+        # Add the label to the content
+        content.add_widget(bubble_label)
+        
+        # Calculate proper heights based on label size
+        label_height = bubble_label.texture_size[1]
+        content_height = label_height + content.padding[1] + content.padding[3]  # Add top and bottom padding
+        content.height = content_height
+        bubble.height = content_height
+        
+        # Add the content to the bubble
+        bubble.add_widget(content)
+        
+        # Add the bubble to the chart
         self.add_widget(bubble)
         
         # Remove the bubble after 2 seconds
