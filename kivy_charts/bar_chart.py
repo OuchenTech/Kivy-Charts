@@ -403,23 +403,21 @@ class BarChart(Widget):
             y (float): The y-coordinate of the top of the bar.
             value: The value to display in the bubble.
         """
-        # Calculate width based on the value length
-        bubble_width = max(60, len(str(value)) * 15)
         
-        # Calculate the center position of the bar
-        bar_center_x = x + self.bar_infos[0]['width'] / 2
-        
-        # Position the bubble centered above the bar
-        bubble_x = bar_center_x - bubble_width / 2
-        bubble_y = y + 10  # Position it above the bar
-        
-        # Create the bubble without an arrow
-        bubble = Bubble(
-            size_hint=(None, None),
-            size=(bubble_width, 0),  # Height will be set after label creation
-            pos=(bubble_x, bubble_y),
-            show_arrow=False  # No arrow
+        # Create Bubble value label
+        bubble_label = Label(
+            text=str(value),
+            font_size=self.value_font_size,
+            color=self.value_color,  
+            font_name=self.font_name,
+            size_hint=(None, None)  # No fixed height
         )
+        
+        # Update the texture to get the actual size
+        bubble_label.texture_update()
+        bubble_label.width = bubble_label.texture_size[0]
+        bubble_label.height = bubble_label.texture_size[1]
+        
         
         # Create bubble content with custom background
         content = BubbleContent(
@@ -428,30 +426,31 @@ class BarChart(Widget):
             background_image="",
             background_color=self.bubble_color,  # Use bubble_color if defined, else default blue,
             border_auto_scale="both_lower",
-            size_hint=(1, None),  # Allow height to adjust to content
-            height=0  # Will be set once the label is added
+            size_hint=(None, None),  # Allow height to adjust to content
         )
         
-        # Add value label to the content, allowing its height to be natural
-        bubble_label = Label(
-            text=str(value),
-            font_size=self.value_font_size,
-            color=self.value_color,  
-            font_name=self.font_name,
-            size_hint=(1, None)  # No fixed height
-        )
-        
-        # Update the texture to get the actual size
-        bubble_label.texture_update()
-        bubble_label.height = bubble_label.texture_size[1]
-        
+        # Calculate proper heights based on label size
+        content_width = bubble_label.width + content.padding[0] + content.padding[2]
+        content_height = bubble_label.height + content.padding[1] + content.padding[3]  # Add top and bottom padding
+        content.width = content_width
+        content.height = content_height
         # Add the label to the content
         content.add_widget(bubble_label)
         
-        # Calculate proper heights based on label size
-        label_height = bubble_label.texture_size[1]
-        content_height = label_height + content.padding[1] + content.padding[3]  # Add top and bottom padding
-        content.height = content_height
+        # Position the bubble centered above the bar
+        bar_center_x = x + self.bar_infos[0]['width'] / 2
+        bubble_width = content_width
+        bubble_x = bar_center_x - bubble_width / 2
+        bubble_y = y + 10  # Position it above the bar
+        
+        # Create the bubble without an arrow
+        bubble = Bubble(
+            size_hint=(None, None),
+            pos=(bubble_x, bubble_y),
+            show_arrow=False  # No arrow
+        )
+        
+        bubble.width = bubble_width
         bubble.height = content_height
         
         # Add the content to the bubble
